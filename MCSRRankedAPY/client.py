@@ -14,6 +14,7 @@ class ClientSessionWrapper:
     self._client = ClientSession(base_url=base_url)
 
   async def request_json(self, method: str, path: str, params: dict = {}) -> dict:
+    """Handles the possible status codes from the API as documented at https://docs.mcsrranked.com"""
     async with self._client.request(method, path, params=params) as response:
       if response.status == 400:
         raise DataNotFoundException(path, params)
@@ -51,17 +52,20 @@ class Users:
     self.key = key
 
   async def get_data(self, identifier: str, **kwargs) -> UserProfile:
+    """Returns the identifier's entire profile data."""
     json = await self._client.request_json(
         "GET", f"users/{identifier}", params=kwargs)
     data = json.get("data")
     return UserProfile(**data)
 
   async def get_matches(self, identifier: str, **kwargs) -> list[MatchInfo]:
+    """Returns the identifier's recent matches"""
     json = await self._client.request_json("GET", f"users/{identifier}/matches", params=kwargs)
     data = json.get("data")
     return [MatchInfo(**data[i]) for i in range(len(data))]
 
   async def get_versus_stats(self, identifier1: str, identifier2: str, **kwargs) -> VersusStats:
+    """Returns the match stats between identifier1 and identifier2 for ranked/casual matches. If there's no match between both users, 400 error will returned."""
     json = await self._client.request_json("GET", f"users/{identifier1}/versus/{identifier2}", params=kwargs)
     data = json.get("data")
     versus_stats = VersusStats(**data)
@@ -75,7 +79,14 @@ class Users:
 
     return versus_stats
 
+  async def get_versus_matches(self, identifier1: str, identifier2: str, **kwargs) -> list[MatchInfo]:
+    """Returns the recent matches between identifier1 and identifier2."""
+    json = await self._client.request_json("GET", f"users/{identifier1}/versus/{identifier2}/matches", params=kwargs)
+    data = json.get("data")
+    return [MatchInfo(**data[i]) for i in range(len(data))]
+
   async def get_seasons(self, identifier: str, **kwargs) -> UserProfile:
+    """Returns the identifier's entire profile data."""
     json = await self._client.request_json("GET", f"users/{identifier}/seasons", params=kwargs)
     data = json.get("data")
     user_profile = UserProfile(**data)
@@ -88,13 +99,13 @@ class Matches:
     self.key = key
 
   async def get_recent(self, **kwargs) -> list[MatchInfo]:
-    """Gets the basic information about recent matches"""
+    """Returns the recent matches."""
     json = await self._client.request_json("GET", "matches", params=kwargs)
     data = json.get("data")
     return [MatchInfo(**data[i]) for i in range(len(data))]
 
   async def get_info(self, id: int, **kwargs) -> MatchInfo:
-    """Gets the advanced information about a specific match"""
+    """Returns the detailed match info."""
     json = await self._client.request_json("GET", f"matches/{id}", params=kwargs)
     data = json.get("data")
     return MatchInfo(**data)
@@ -105,20 +116,20 @@ class Leaderboards:
     self._client = client
     self.key = key
 
-  async def get_elo(self, **kwargs):
-    """Gets the ELO leaderboard (top 150 but not always 150)"""
+  async def get_elo(self, **kwargs) -> EloLeaderboard:
+    """Returns Top 150 Leaderboard for Elo rates (it's not always 150 players due to same ranks)"""
     json = await self._client.request_json("GET", "leaderboard", params=kwargs)
     data = json.get("data")
     return EloLeaderboard(**data)
 
-  async def get_season_phase_points(self, **kwargs):
-    """Gets the season phase points leaderboard"""
+  async def get_season_phase_points(self, **kwargs) -> SeasonPhasePointsLeaderboard:
+    """Returns Top 100 Phase Points Leaderboard for Current Season"""
     json = await self._client.request_json("GET", "phase-leaderboard", params=kwargs)
     data = json.get("data")
     return SeasonPhasePointsLeaderboard(**data)
 
-  async def get_season_phase_points(self, **kwargs):
-    """Gets the season best time leaderboard"""
+  async def get_best_time(self, **kwargs) -> list[BestTimeEntry]:
+    """Returns Best Time Leaderboard for Current Season"""
     json = await self._client.request_json("GET", "record-leaderboard", params=kwargs)
     data = json.get("data")
     return [BestTimeEntry(**data[i]) for i in range(len(data))]
@@ -129,8 +140,8 @@ class WeeklyRaces:
     self._client = client
     self.key = key
 
-  async def get_info_leaderboard(self, id: int = -1, **kwargs):
-    """Get weekly race info and leaderboard"""
+  async def get_info_leaderboard(self, id: int = -1, **kwargs) -> WeeklyRaceLeaderboard:
+    """Returns Weekly Race info and leaderboard"""
     json = await self._client.request_json("GET", f"weekly-race{'' if id < 0 else f'/{id}'}")
     data = json.get("data")
     return WeeklyRaceLeaderboard(**data)
