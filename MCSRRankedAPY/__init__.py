@@ -1,2 +1,2 @@
-from .client import MCSRRankedClient
+from .client import MCSRRankedAPYClient
 from .objects import *

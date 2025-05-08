@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcsrrankedapy"
+version = "1.0.1"
+description = "An API wrapper for the MCSR Ranked API"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.7"
+license = { file = "LICENSE" }
+authors = [{ name = "Myer", email = "myer@myer.wtf" }]
+dependencies = ["aiohttp", "pydantic"]

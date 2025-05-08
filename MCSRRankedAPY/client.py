@@ -32,7 +32,7 @@ class ClientSessionWrapper:
     await self._client.close()
 
 
-class MCSRRankedClient:
+class MCSRRankedAPYClient:
   def __init__(self, key: Optional[str] = None):
     self._client = ClientSessionWrapper(base_url=MCSR_RANKED_API_URI)
 
