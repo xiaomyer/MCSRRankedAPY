@@ -1,7 +1,7 @@
 from __future__ import annotations
 from pydantic import BaseModel, Field
 from datetime import datetime, timedelta
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 
 class Achievement(BaseModel):
@@ -143,3 +143,4 @@ class UserProfile(BaseModel):
   weeklyRaces: List[WeeklyRace] = Field(default_factory=list)
   seasonPlaced: Optional[bool] = None
   seasonResult: Optional[SeasonResult] = None
+  seasonResults: Optional[Dict[str, SeasonResult]] = None

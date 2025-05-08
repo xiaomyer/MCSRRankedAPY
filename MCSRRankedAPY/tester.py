@@ -5,9 +5,12 @@ import asyncio
 
 
 async def main():
-  api = MCSRRankedClient()
-  query = await api.users.get_versus_stats("doogile", "lowk3y_")
-  pprint(query)
+  try:
+    api = MCSRRankedClient()
+    query = await api.matches.get_info(2076243)
+    pprint(query)
+  finally:
+    await api.close()
 
 if __name__ == "__main__":
   asyncio.run(main())
