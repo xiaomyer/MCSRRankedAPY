@@ -37,9 +37,15 @@ class Changes(BaseModel):
   eloRate: Optional[int] = None
 
 
-class Advanced(BaseModel):
-  # Placeholder for future fields
-  pass
+class Completion(BaseModel):
+  uuid: str
+  time: timedelta
+
+
+class Timeline(BaseModel):
+  uuid: str
+  time: timedelta
+  type: str
 
 
 class MatchInfo(BaseModel):
@@ -57,3 +63,6 @@ class MatchInfo(BaseModel):
   rank: Rank
   changes: List[Changes] = Field(default_factory=list)
   tag: Optional[str] = None
+  completions: Optional[List[Completion]] = None
+  timelines: Optional[List[Timeline]] = None
+  replayExist: Optional[bool] = None
