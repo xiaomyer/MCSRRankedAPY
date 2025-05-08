@@ -1,10 +1,11 @@
 from aiohttp import ClientSession
-from objects.match_info import MatchInfo
-from objects.user_profile import UserProfile
-from objects.versus_stats import VersusStats
-from objects.leaderboards import EloLeaderboard, SeasonPhasePointsLeaderboard, BestTimeEntry, WeeklyRaceLeaderboard
 from typing import Optional
-from objects.exceptions import *
+
+from .objects.match_info import MatchInfo
+from .objects.user_profile import UserProfile
+from .objects.versus_stats import VersusStats
+from .objects.leaderboards import EloLeaderboard, SeasonPhasePointsLeaderboard, BestTimeEntry, WeeklyRaceLeaderboard
+from .objects.exceptions import *
 
 MCSR_RANKED_API_URI = "https://api.mcsrranked.com/"
 
