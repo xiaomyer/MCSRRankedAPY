@@ -1,11 +1,12 @@
-from src.client import MCSRRankedClient
+from client import MCSRRankedClient
 from pprint import pprint
 
 import asyncio
 
+
 async def main():
   api = MCSRRankedClient()
-  query = await api.users.get_user_matches("xiaomyer")
+  query = await api.users.get_versus_stats("doogile", "lowk3y_")
   pprint(query)
 
 if __name__ == "__main__":
