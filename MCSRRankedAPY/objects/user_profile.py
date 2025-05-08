@@ -123,7 +123,7 @@ class SeasonResultPhase(BaseModel):
 
 
 class SeasonResult(BaseModel):
-  last: SeasonResultLast
+  last: Optional[SeasonResultLast] = None
   highest: Optional[int] = None
   lowest: Optional[int] = None
   phases: List[SeasonResultPhase] = Field(default_factory=list)
